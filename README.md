@@ -16,7 +16,7 @@ A simple command-line tool written in Rust that converts Markdown files into HTM
 Clone the repository and build the project:
 
 ```shell
-git clone <your-repo-url>
+git clone https://github.com/Niall-Sharma/mkweb.git
 cd <project-directory>
 cargo build --release
 ```
