@@ -43,7 +43,7 @@ fn main() {
 
             let parsed = parse_files(&cli.input).unwrap();
 
-            let generated_html = build::generate_html(parsed);
+            let generated_html = build::generate_html(parsed, &cli.output);
             match generated_html {
                 Ok(_result) => println!("Successfully generated html"),
                 Err(e) => println!("Error {}", e),
