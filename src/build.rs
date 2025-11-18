@@ -1,32 +1,47 @@
+use crate::parser::ParsedFile;
 use pulldown_cmark::Parser;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{Error, Read, Write};
 use std::path::PathBuf;
-
-use crate::parser::ParsedFile;
 
 #[derive(Debug)]
 pub struct HtmlFile {
     pub content: String,
 }
 
-pub fn generate_html(parsed_files: Vec<ParsedFile>, path_out: &PathBuf) -> Result<(), Error> {
-    let file_extension = ".html";
+pub fn generate_html(
+    parsed_files: Vec<ParsedFile>,
+    path_in: &PathBuf,
+    path_out: &PathBuf,
+) -> Result<(), Error> {
+    let file_extension = "html";
+
+    let mut base_out = PathBuf::from(path_out);
+    base_out.push(path_in.file_name().unwrap());
+
+    fs::create_dir_all(&base_out)?;
 
     for file in parsed_files {
         let mut html_output = String::new();
-        let content = file.content;
-        let parser = Parser::new(&content);
-
-        let stem = file.path.file_stem().unwrap().to_string_lossy();
-        let new_file_path = format!("{}/{}{}", path_out.to_string_lossy(), stem, file_extension);
-
+        let parser = Parser::new(&file.content);
         pulldown_cmark::html::push_html(&mut html_output, parser);
+
         let updated_file = inject_css(HtmlFile {
             content: html_output,
-        });
-        let mut file = File::create(new_file_path)?;
-        file.write_all(updated_file?.content.as_bytes())?;
+        })?;
+
+        let mut out_path = base_out.clone();
+
+        let stem = file.path.file_stem().unwrap().to_string_lossy().to_string();
+
+        out_path.push(format!("{}.{}", stem, file_extension));
+
+        if let Some(parent) = out_path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+
+        let mut out_file = File::create(&out_path)?;
+        out_file.write_all(updated_file.content.as_bytes())?;
     }
 
     Ok(())

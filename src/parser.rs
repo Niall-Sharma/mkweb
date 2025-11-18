@@ -40,6 +40,5 @@ pub fn parse_files(file_path: &PathBuf) -> Result<Vec<ParsedFile>, Error> {
             content: file,
         });
     }
-    println!("PARSED: {:?}", parsed_files);
     Ok(parsed_files)
 }
