@@ -30,9 +30,7 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Build the static site
     Build,
-    /// Watch vault and rebuild on changes
     Watch,
 }
 
@@ -45,11 +43,7 @@ fn main() {
 
             let parsed = parse_files(&cli.input).unwrap();
 
-            println!("Parsed: {:?}", parsed);
-
             let generated_html = build::generate_html(parsed).unwrap();
-
-            println!("Generated HTML: {:?}", generated_html);
         }
         Some(Commands::Watch) => {
             println!(
