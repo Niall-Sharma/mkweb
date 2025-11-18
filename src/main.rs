@@ -1,7 +1,7 @@
 mod parser;
 
 use clap::{Parser, Subcommand};
-use parser::collect_mk;
+use parser::{collect_mk, parse_file, parse_files};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -42,8 +42,9 @@ fn main() {
         Some(Commands::Build) => {
             println!("Building site from {:?} into {:?}", cli.input, cli.output);
 
-            let paths = collect_mk(&cli.input);
-            println!("Paths: {:?}", paths.unwrap());
+            let parsed = parse_files(&cli.input);
+
+            println!("Parsed: {:?}", parsed);
             // call your build logic here
         }
         Some(Commands::Watch) => {
