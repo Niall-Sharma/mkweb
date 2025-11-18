@@ -90,8 +90,8 @@ parser.rs # Markdown → HTML conversion logic
 
 ## Future Improvements
 
-- [ ] Template support (wrap generated HTML in a page layout)
-- [ ] CSS injection
+- [ ] Checkbox support
+- [ ] Table support
 - [ ] Front-matter parsing (YAML/JSON)
 - [ ] Incremental builds
 - [ ] File watcher for live-rebuild
