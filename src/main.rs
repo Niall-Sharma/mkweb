@@ -1,7 +1,8 @@
+mod build;
 mod parser;
 
 use clap::{Parser, Subcommand};
-use parser::{collect_mk, parse_file, parse_files};
+use parser::parse_files;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -42,10 +43,13 @@ fn main() {
         Some(Commands::Build) => {
             println!("Building site from {:?} into {:?}", cli.input, cli.output);
 
-            let parsed = parse_files(&cli.input);
+            let parsed = parse_files(&cli.input).unwrap();
 
             println!("Parsed: {:?}", parsed);
-            // call your build logic here
+
+            let generated_html = build::generate_html(parsed).unwrap();
+
+            println!("Generated HTML: {:?}", generated_html);
         }
         Some(Commands::Watch) => {
             println!(
