@@ -12,12 +12,11 @@ use std::path::PathBuf;
     about = "Convert an Obsidian vault into a static website"
 )]
 pub struct Cli {
-    /// Path to the Obsidian vault
     #[arg(short, long)]
     pub input: PathBuf,
 
     /// Output directory for the generated site
-    #[arg(short, long, default_value = "public")]
+    #[arg(short, long, default_value = "public/notes")]
     pub output: PathBuf,
 
     /// Optional: clean output directory before building
@@ -54,7 +53,6 @@ fn main() {
                 "Watching {:?} and rebuilding into {:?}",
                 cli.input, cli.output
             );
-            // call your watch logic here
         }
         None => {
             println!("No command provided. Try --help.");

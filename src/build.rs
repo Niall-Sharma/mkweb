@@ -48,7 +48,7 @@ pub fn generate_html(
 }
 
 pub fn inject_css(mut generated_file: HtmlFile) -> Result<HtmlFile, Error> {
-    let html_layout = File::open("./public/layout.html");
+    let html_layout = File::open("./src/layout.html");
     let mut layout_content = String::new();
 
     html_layout?.read_to_string(&mut layout_content)?;
