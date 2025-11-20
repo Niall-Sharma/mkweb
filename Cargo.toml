@@ -4,5 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+axum = "0.8.7"
 clap = { version = "4.5.4", features = ["derive"] }
 pulldown-cmark = { version = "0.13.0", default-features = true }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "fs"] }
+tower-http = { version = "0.5", features = ["fs"] }
+

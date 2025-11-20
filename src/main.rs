@@ -1,8 +1,10 @@
 mod build;
 mod parser;
+mod server;
 
 use clap::{Parser, Subcommand};
 use parser::parse_files;
+use server::run;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -30,7 +32,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Commands {
     Build,
-    Watch,
+    Serve,
 }
 
 fn main() {
@@ -40,20 +42,26 @@ fn main() {
         Some(Commands::Build) => {
             println!("Building site from {:?} into {:?}", cli.input, cli.output);
 
-            let parsed = parse_files(&cli.input).unwrap();
-
+            let parsed = match parse_files(&cli.input) {
+                Ok(p) => p,
+                Err(e) => {
+                    println!("Parser error: {}", e);
+                    return;
+                }
+            };
             let generated_html = build::generate_html(parsed, &cli.input, &cli.output);
             match generated_html {
                 Ok(_result) => println!("Successfully generated html"),
                 Err(e) => println!("Error {}", e),
             }
         }
-        Some(Commands::Watch) => {
-            println!(
-                "Watching {:?} and rebuilding into {:?}",
-                cli.input, cli.output
-            );
-        }
+        Some(Commands::Serve) => match run() {
+            Ok(p) => p,
+            Err(e) => {
+                println!("Error starting server: {}", e);
+                return;
+            }
+        },
         None => {
             println!("No command provided. Try --help.");
         }
