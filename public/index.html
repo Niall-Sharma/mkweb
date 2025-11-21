@@ -20,7 +20,7 @@
     <div class="welcome">
       <h2>Welcome</h2>
       <p>
-        Pick a note from the sidebar to view it.
+        Pick a note to view it.
       </p>
     </div>
   </div>
@@ -35,16 +35,24 @@
 
         listEl.innerHTML = "";
 
+        const indexListElement = document.createElement("li");
+        const indexA = document.createElement("a");
+
+        indexA.href = "/";
+        indexA.textContent = "Home";
+
+        indexListElement.appendChild(indexA);
+        listEl.appendChild(indexListElement);
         files.forEach(full => {
           const short = full
-            .replace(/^vault\//, "")
-            .replace(/\.md$/, "");
-
+            .replace(/\.html$/, "");
+          const li = document.createElement("li");
           const a = document.createElement("a");
           a.href = "/notes/" + full;
           a.textContent = short;
 
-          listEl.appendChild(a);
+          li.appendChild(a);
+          listEl.appendChild(li);
         });
       } catch (e) {
         listEl.textContent = "Failed to load notes.";

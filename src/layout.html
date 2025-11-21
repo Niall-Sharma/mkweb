@@ -5,7 +5,51 @@
 </head>
 
 <body>
-  {{content}}
+  <div class="sidebar">
+    <h1>Vault Index</h1>
+    <div class="file-list" id="file-list">
+      Loading notes…
+    </div>
+  </div>
+  <div class="content">
+    {{content}}
+  </div>
+
+  <script>
+    async function loadFiles() {
+      const listEl = document.getElementById("file-list");
+
+      try {
+        const res = await fetch("/api/notes");
+        const files = await res.json();
+
+        listEl.innerHTML = "";
+        const indexListElement = document.createElement("li");
+        const indexA = document.createElement("a");
+
+        indexA.href = "/";
+        indexA.textContent = "Home";
+
+        indexListElement.appendChild(indexA);
+        listEl.appendChild(indexListElement);
+        files.forEach(full => {
+          const short = full
+            .replace(/\.html$/, "");
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = "/notes/" + full;
+          a.textContent = short;
+
+          li.appendChild(a);
+          listEl.appendChild(li);
+        });
+      } catch (e) {
+        listEl.textContent = "Failed to load notes.";
+      }
+    }
+
+    loadFiles();
+  </script>
 </body>
 
 </html>
