@@ -9,16 +9,10 @@ pub struct HtmlFile {
     pub content: String,
 }
 
-pub fn generate_html(
-    parsed_files: Vec<ParsedFile>,
-    path_in: &PathBuf,
-    path_out: &PathBuf,
-) -> Result<(), Error> {
+pub fn generate_html(parsed_files: Vec<ParsedFile>, path_out: &PathBuf) -> Result<(), Error> {
     let file_extension = "html";
 
-    let mut base_out = PathBuf::from(path_out);
-    base_out.push(path_in.file_name().unwrap());
-
+    let base_out = PathBuf::from(path_out);
     fs::create_dir_all(&base_out)?;
     for file in parsed_files {
         let mut html_output = String::new();
@@ -28,7 +22,6 @@ pub fn generate_html(
         let updated_file = inject_css(HtmlFile {
             content: html_output,
         })?;
-
         let mut out_path = base_out.clone();
 
         let stem = file.path.file_stem().unwrap().to_string_lossy().to_string();
@@ -47,10 +40,11 @@ pub fn generate_html(
 }
 
 pub fn inject_css(mut generated_file: HtmlFile) -> Result<HtmlFile, Error> {
-    let html_layout = File::open("./src/templates/layout.html");
+    let path = format!("{}/src/layout.html", env!("CARGO_MANIFEST_DIR"));
+    let html_layout = File::open(path);
     let mut layout_content = String::new();
-
     html_layout?.read_to_string(&mut layout_content)?;
+
     let merged_content = layout_content.replace("{{content}}", &generated_file.content);
     generated_file.content = merged_content;
     Ok(generated_file)

@@ -15,9 +15,9 @@ pub async fn run() -> Result<(), Error> {
         .route("/api/notes", get(list_notes))
         .nest_service(
             "/notes",
-            get_service(ServeDir::new("./public/notes")).handle_error(|err| async move {
+            get_service(ServeDir::new("./public/notes/")).handle_error(|err| async move {
                 (
-                    axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                    axum::http::StatusCode::NOT_FOUND,
                     format!("Static file error: {}", err),
                 )
             }),
@@ -37,7 +37,7 @@ pub async fn index() -> impl IntoResponse {
 }
 
 pub async fn list_notes() -> impl IntoResponse {
-    let mut entries = match fs::read_dir("./public/notes/test").await {
+    let mut entries = match fs::read_dir("./public/notes").await {
         Ok(p) => p,
         Err(e) => {
             return (

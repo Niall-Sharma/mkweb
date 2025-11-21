@@ -18,7 +18,7 @@ pub struct Cli {
     pub input: PathBuf,
 
     /// Output directory for the generated site
-    #[arg(short, long, default_value = "public/notes")]
+    #[arg(short, long, default_value = "./public/notes")]
     pub output: PathBuf,
 
     /// Optional: clean output directory before building
@@ -40,8 +40,6 @@ fn main() {
 
     match cli.command {
         Some(Commands::Build) => {
-            println!("Building site from {:?} into {:?}", cli.input, cli.output);
-
             let parsed = match parse_files(&cli.input) {
                 Ok(p) => p,
                 Err(e) => {
@@ -49,7 +47,7 @@ fn main() {
                     return;
                 }
             };
-            let generated_html = build::generate_html(parsed, &cli.input, &cli.output);
+            let generated_html = build::generate_html(parsed, &cli.output);
             match generated_html {
                 Ok(_result) => println!("Successfully generated html"),
                 Err(e) => println!("Build Error {}", e),
