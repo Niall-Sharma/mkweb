@@ -93,8 +93,6 @@ parser.rs # Markdown → HTML conversion logic
 - [ ] Checkbox support
 - [ ] Table support
 - [ ] Front-matter parsing (YAML/JSON)
-- [ ] Incremental builds
-- [ ] File watcher for live-rebuild
 
 ## License
 

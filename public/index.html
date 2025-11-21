@@ -2,57 +2,57 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Your Vault</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Vault</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <div class="sidebar">
-        <h1>Vault Index</h1>
-        <div class="file-list" id="file-list">
-            Loading notes…
-        </div>
+  <div class="sidebar">
+    <h1>Vault Index</h1>
+    <div class="file-list" id="file-list">
+      Loading notes…
     </div>
+  </div>
 
-    <div class="content">
-        <div class="welcome">
-            <h2>Welcome</h2>
-            <p>
-                Pick a note from the sidebar to view it.
-            </p>
-        </div>
+  <div class="content">
+    <div class="welcome">
+      <h2>Welcome</h2>
+      <p>
+        Pick a note from the sidebar to view it.
+      </p>
     </div>
+  </div>
 
-    <script>
-        async function loadFiles() {
-            const listEl = document.getElementById("file-list");
+  <script>
+    async function loadFiles() {
+      const listEl = document.getElementById("file-list");
 
-            try {
-                const res = await fetch("/api/list");
-                const files = await res.json();
+      try {
+        const res = await fetch("/api/notes");
+        const files = await res.json();
 
-                listEl.innerHTML = "";
+        listEl.innerHTML = "";
 
-                files.forEach(full => {
-                    const short = full
-                        .replace(/^vault\//, "")
-                        .replace(/\.md$/, "");
+        files.forEach(full => {
+          const short = full
+            .replace(/^vault\//, "")
+            .replace(/\.md$/, "");
 
-                    const a = document.createElement("a");
-                    a.href = "/note/" + short;
-                    a.textContent = short;
+          const a = document.createElement("a");
+          a.href = "/notes/" + full;
+          a.textContent = short;
 
-                    listEl.appendChild(a);
-                });
-            } catch (e) {
-                listEl.textContent = "Failed to load notes.";
-            }
-        }
+          listEl.appendChild(a);
+        });
+      } catch (e) {
+        listEl.textContent = "Failed to load notes.";
+      }
+    }
 
-        loadFiles();
-    </script>
+    loadFiles();
+  </script>
 </body>
 
 </html>
