@@ -5,11 +5,12 @@ A simple command-line tool written in Rust that converts Markdown files into HTM
 ## Features
 
 - Recursive collection of Markdown files from an input directory
-- Conversion from `.md` to `.html` using `pulldown-cmark`
-- Automatic output directory creation
-- Optional clean build
-- Simple, type-safe CLI built with `clap`
-- Extendable build pipeline suitable for static-site workflows
+- Conversion from `.md` to `.html` using `pulldown-cmark`.
+- Automatic output directory creation.
+- Optional clean build.
+- Simple, type-safe CLI built with `clap`.
+- Extendable build pipeline suitable for static-site workflows.
+- Access generated `.html` files through localhost with `serve` commannd.
 
 ## Installation
 
@@ -53,6 +54,7 @@ Convert an entire Markdown directory into HTML:
 | `-o, --output`      | Output directory for generated HTML (default: `public`) |
 | `--clean`           | Remove the output directory before generating files |
 | `build`             | Run the build pipeline                              |
+| `serve`             | Serve the generated files using localhost           |
 
 Example full command:
 
