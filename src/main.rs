@@ -52,7 +52,7 @@ fn main() {
             let generated_html = build::generate_html(parsed, &cli.input, &cli.output);
             match generated_html {
                 Ok(_result) => println!("Successfully generated html"),
-                Err(e) => println!("Error {}", e),
+                Err(e) => println!("Build Error {}", e),
             }
         }
         Some(Commands::Serve) => match run() {
