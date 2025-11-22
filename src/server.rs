@@ -9,7 +9,7 @@ use tokio::fs;
 use tower_http::services::ServeDir;
 
 #[tokio::main]
-pub async fn run() -> Result<(), Error> {
+pub async fn run(host: &String) -> Result<(), Error> {
     let app = Router::new()
         .route("/", get(index))
         .route("/api/notes", get(list_notes))
@@ -23,7 +23,7 @@ pub async fn run() -> Result<(), Error> {
             }),
         )
         .fallback_service(ServeDir::new("./public"));
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+    let listener = tokio::net::TcpListener::bind(host).await?;
 
     axum::serve(listener, app).await?;
     Ok(())
