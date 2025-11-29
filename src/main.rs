@@ -14,46 +14,43 @@ use std::path::PathBuf;
     about = "Convert an Obsidian vault into a static website"
 )]
 pub struct Cli {
-    #[arg(short, long)]
-    pub input: PathBuf,
-
-    /// Output directory for the generated site
-    #[arg(short, long, default_value = "./public/notes")]
-    pub output: PathBuf,
-
-    /// Optional: clean output directory before building
-    #[arg(long)]
-    pub clean: bool,
-
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
 
 #[derive(Subcommand)]
 pub enum Commands {
-    Build,
-    Serve,
+    Build {
+        #[arg(short, long)]
+        input: PathBuf,
+        #[arg(short, long, default_value = "./public/notes")]
+        output: PathBuf,
+    },
+    Serve {
+        #[arg(long, default_value = "0.0.0.0:3000")]
+        host: String,
+    },
 }
 
 fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Some(Commands::Build) => {
-            let parsed = match parse_files(&cli.input) {
+        Some(Commands::Build { input, output }) => {
+            let parsed = match parse_files(&input) {
                 Ok(p) => p,
                 Err(e) => {
                     println!("Parser error: {}", e);
                     return;
                 }
             };
-            let generated_html = build::generate_html(parsed, &cli.output);
+            let generated_html = build::generate_html(parsed, &output);
             match generated_html {
                 Ok(_result) => println!("Successfully generated html"),
                 Err(e) => println!("Build Error {}", e),
             }
         }
-        Some(Commands::Serve) => match run() {
+        Some(Commands::Serve { host }) => match run(&host) {
             Ok(p) => p,
             Err(e) => {
                 println!("Error starting server: {}", e);
