@@ -27,8 +27,10 @@ pub enum Commands {
         output: PathBuf,
     },
     Serve {
-        #[arg(long, default_value = "0.0.0.0:3000")]
+        #[arg(long, default_value = "0.0.0.0")]
         host: String,
+        #[arg(long, default_value = "3000")]
+        port: String,
     },
 }
 
@@ -50,7 +52,7 @@ fn main() {
                 Err(e) => println!("Build Error {}", e),
             }
         }
-        Some(Commands::Serve { host }) => match run(&host) {
+        Some(Commands::Serve { host, port }) => match run(&host, &port) {
             Ok(p) => p,
             Err(e) => {
                 println!("Error starting server: {}", e);
